@@ -59,10 +59,10 @@ namespace transformer {
     }
 
     ublas::matrix<double> Transformer::create_lookahead_mask(int size) {
-        ublas::matrix<double> mask(size, size);
+        ublas::matrix<double> mask(size, size) = ublas::zero_matrix<double>(size, size);
         for (int i = 0; i < size; ++i)
             for (int j = 0; j <= i; ++j)
-                mask(i, j) = 1;
+                mask(i, j) = 1.0;
         return mask;
     }
 
