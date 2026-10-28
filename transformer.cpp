@@ -77,19 +77,20 @@ namespace transformer {
         ublas::matrix<double> lookahead_mask = create_lookahead_mask(decoder_input.size1());
 
         // sin positional encoding
-        auto seq_len = encoder_input.size1(); // no batch, batched would be batch_size * this
-        auto pe = positional_encoding(seq_len, embed_dim);
-        auto enc_input = encoder_input + pe;
-        auto dec_input = decoder_input + pe;
+        // auto seq_len = encoder_input.size1(); // no batch, batched would be batch_size * this
+        auto encoder_pe = positional_encoding(encoder_input.size1(), embed_dim);
+        auto decoder_pe = positional_encoding(decoder_input.size1(), embed_dim);
+        auto enc_input = encoder_input + encoder_pe;
+        auto dec_input = decoder_input + decoder_pe;
 
         // encoder stack
-        auto enc_out = encoder_input;
+        auto enc_out = enc_input;
         for (auto& layer : encoders) {
             enc_out = layer.forward(enc_out);
         }
         
         // decoder masked self-attention, then forward with encoder input
-        auto dec_out = decoder_input;
+        auto dec_out = dec_input;
         for (auto& layer : decoders) {
             auto masked_out = layer.masked_self_attention(dec_out, &lookahead_mask);
             dec_out = layer.forward(masked_out, enc_out, enc_out);
