@@ -71,6 +71,7 @@ namespace transformer {
 
 
     ublas::matrix<double> random_weight(int rows, int cols);
+    ublas::matrix<double> random_weight_parallel(int rows, int cols);
 
     inline ublas::matrix<double> linear(
         const ublas::matrix<double>& X,

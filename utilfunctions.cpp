@@ -38,18 +38,36 @@ namespace transformer {
 
     ublas::matrix<double> random_weight(int rows, int cols) {
         ublas::matrix<double> mat(rows, cols);
-        std::normal_distribution<> dist(0, 1);
+        std::normal_distribution<double> dist(0.0, std::sqrt(2.0 / rows)); // He initialization
+        auto& gen = global_generator();
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                mat(i, j) = dist(gen);
+            }
+        }
+
+        return mat;
+    }
+
+    ublas::matrix<double> random_weight_parallel(int rows, int cols) {
+        ublas::matrix<double> mat(rows, cols);
         auto& gen = global_generator();
 
         #pragma omp parallel
         {
-            std::mt19937 local_gen(gen());
-            std::normal_distribution<> local_dist(0, 1);
+            std::mt19937 local_gen();
+
+            #pragma omp critical
+            {
+                local_gen.seed(gen());
+            }
+            std::normal_distribution<double> local_dist(0.0, std::sqrt(2.0 / rows)); // He initialization
             
             #pragma omp for collapse(2)
             for (int i = 0; i < rows; ++i) {
                 for (int j = 0; j < cols; ++j) {
-                    mat(i, j) = dist(gen);
+                    mat(i, j) = local_dist(local_gen);
                 }
             }
         }
