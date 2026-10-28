@@ -69,7 +69,7 @@ namespace transformer {
         return ublas::prod(attn, V);
     }
 
-
+    ublas::matrix<double> one_matrix(int rows, int cols);
     ublas::matrix<double> random_weight(int rows, int cols);
     ublas::matrix<double> random_weight_parallel(int rows, int cols);
 

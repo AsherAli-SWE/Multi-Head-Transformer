@@ -16,22 +16,22 @@ namespace transformer {
         }
         
         Wo_self = random_weight(embed_dim, embed_dim);
-        bo_self = random_weight(embed_dim, 1);
+        bo_self = ublas::zero_matrix<double>(embed_dim, 1);
 
         W1 = random_weight(embed_dim, 4 * embed_dim);
-        b1 = random_weight(4 * embed_dim, 1);
+        b1 = ublas::zero_matrix<double>(4 * embed_dim, 1);
         W2 = random_weight(4 * embed_dim, embed_dim);
-        b2 = random_weight(embed_dim, 1);
+        b2 = ublas::zero_matrix<double>(embed_dim, 1);
 
         dW1 = ublas::zero_matrix<double>(embed_dim, 4*embed_dim);
         db1 = ublas::zero_matrix<double>(4*head_dim, 1);
         dW2 = ublas::zero_matrix<double>(4*embed_dim, embed_dim);
         db2 = ublas::zero_matrix<double>(embed_dim, 1);
 
-        gamma1 = random_weight(embed_dim, 1);
-        beta1 = random_weight(embed_dim, 1);
-        gamma2 = random_weight(embed_dim, 1);
-        beta2 = random_weight(embed_dim, 1);
+        gamma1 = one_matrix(embed_dim, 1);
+        beta1 = ublas::zero_matrix<double>(embed_dim, 1);
+        gamma2 = one_matrix(embed_dim, 1);
+        beta2 = ublas::zero_matrix<double>(embed_dim, 1);
     }
 
     ublas::matrix<double> CommonSubLayer::forward(const ublas::matrix<double>& input) {

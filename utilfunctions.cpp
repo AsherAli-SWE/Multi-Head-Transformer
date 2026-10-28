@@ -36,6 +36,14 @@ namespace transformer {
         return gen;
     }
 
+    ublas::matrix<double> one_matrix(int rows, int cols) {
+        ublas::matrix<double> mat(rows, cols);
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                mat(i, j) = 1.0;
+        return mat;
+    }
+
     ublas::matrix<double> random_weight(int rows, int cols) {
         ublas::matrix<double> mat(rows, cols);
         std::normal_distribution<double> dist(0.0, std::sqrt(2.0 / rows)); // He initialization

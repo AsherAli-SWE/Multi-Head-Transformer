@@ -13,7 +13,7 @@ namespace transformer {
         }
 
         W_final = random_weight(embed_dim, vocab_size);
-        b_final = random_weight(vocab_size, 1);
+        b_final = ublas::zero_matrix<double>(vocab_size, 1);
         embedding_matrix = create_embedding_matrix(vocab_size, embed_dim);
 
     }

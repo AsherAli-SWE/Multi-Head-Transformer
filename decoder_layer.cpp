@@ -14,10 +14,10 @@ namespace transformer {
         }
 
         Wo_masked = random_weight(embed_dim, embed_dim);
-        bo_masked = random_weight(embed_dim, 1);
+        bo_masked = ublas::zero_matrix<double>(embed_dim, 1);
 
-        gamma3 = random_weight(embed_dim, 1);
-        beta3 = random_weight(embed_dim, 1);
+        gamma3 = one_matrix(embed_dim, 1);
+        beta3 = ublas::zero_matrix<double>(embed_dim, 1);
     }
 
     ublas::matrix<double> DecoderLayer::masked_self_attention(
