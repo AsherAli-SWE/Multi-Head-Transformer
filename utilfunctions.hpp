@@ -11,31 +11,6 @@ namespace transformer {
     inline ublas::matrix<double> scaled_dot_product_attention(
         const ublas::matrix<double>& Q,     // query matrix
         const ublas::matrix<double>& K,     // key matrix
-        const ublas::matrix<double>& V     // values matrix
-    ) {
-        // dot product of query with all keys
-        ublas::matrix<double> scores = ublas::prod(Q, ublas::trans(K));
-
-        // calculate scale
-        double scale = sqrt((double)K.size2()); // sqrt(dimension of Keys)
-
-        // divide each by the scale
-        //#pragma omp parallel for collapse(2)
-        for (size_t i = 0; i < scores.size1(); ++i)
-            for (size_t j = 0; j < scores.size2(); ++j)
-                scores(i, j) /= scale;
-
-
-        // apply softmax function
-        auto attn = softmax(scores);
-        
-        // return the weights on the values
-        return ublas::prod(attn, V);
-    }
-
-    inline ublas::matrix<double> scaled_dot_product_attention(
-        const ublas::matrix<double>& Q,     // query matrix
-        const ublas::matrix<double>& K,     // key matrix
         const ublas::matrix<double>& V,     // values matrix
         const ublas::matrix<double>* mask = nullptr // optional mask
     ) {
@@ -57,7 +32,7 @@ namespace transformer {
             for (size_t i = 0; i < scores.size1(); ++i) {
                 for (size_t j = 0; j < scores.size2(); ++j) {
                     if ((*mask)(i, j) == 0) {
-                        scores(i, j) = -1e308;
+                        scores(i, j) = -std::numeric_limits<double>::infinity();
                     }
                 }
             }

@@ -11,7 +11,7 @@ namespace transformer {
         //#pragma omp parallel for
         for (size_t i = 0; i < x.size1(); ++i) {
             
-            double max_val = -1e308;;
+            double max_val = -std::numeric_limits<double>::infinity();
             
             //find max value
             for (size_t j = 0; j < x.size2(); ++j)
